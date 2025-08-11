@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pirate Parrot Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="gameContainer">
+        <div id="gameHeader">
+            <h1>Pirate Parrot Game</h1>
+            <div id="scoreDisplay">Score: 0</div>
+        </div>
+        
+        <!-- Persistent Bonus Messages -->
+        <div id="bonusContainer">
+            <div id="pharosBonus" class="bonus-message hidden">
+                <span>BONUS: FOLLOW Pharos on X</span>
+                <button class="follow-button" onclick="window.open('https://x.com/pharos_network', '_blank')">Follow</button>
+            </div>
+            <div id="blocksenseBonus" class="bonus-message hidden">
+                <span>BONUS: FOLLOW Blocksense on X</span>
+                <button class="follow-button" onclick="window.open('https://x.com/blocksense_', '_blank')">Follow</button>
+            </div>
+        </div>
+        
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        
+        <div id="gameControls">
+            <div id="bonusMessage"></div>
+            
+            <!-- Start Screen -->
+            <div id="startScreen">
+                <h2>Welcome to Pirate Parrot Game!</h2>
+                <p>Use arrow keys to move, SPACEBAR to shoot</p>
+                <p>Reach 5 points for Pharos bonus, 10 points for Blocksense bonus</p>
+                <button id="startButton">Press ENTER or Click to Start</button>
+            </div>
+            
+            <div id="gameOverScreen" class="hidden">
+                <h2>GAME OVER</h2>
+                <p>Final Score: <span id="finalScore">0</span></p>
+                
+                <!-- Blockchain Section -->
+                <div id="blockchainSection">
+                    <div id="blockchainStatus">Sending score to blockchain automatically...</div>
+                    <div id="transactionInfo" class="hidden">
+                        <p>Transaction sent successfully!</p>
+                        <p>TX Hash: <a id="transactionLink" href="#" target="_blank">#</a></p>
+                    </div>
+                </div>
+                
+                <button id="restartButton">Restart Game</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Web3.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.2/dist/web3.min.js"></script>
+    
+    <!-- Game Scripts -->
+    <script src="web3-integration.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
