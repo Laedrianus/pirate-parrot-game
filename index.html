@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Pirate Parrot Game</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
 </head>
 <body>
     <div id="gameContainer">
@@ -12,54 +13,60 @@
             <h1>Pirate Parrot Game</h1>
             <div id="scoreDisplay">Score: 0</div>
         </div>
-        
-        <!-- Persistent Bonus Messages -->
+
         <div id="bonusContainer">
             <div id="pharosBonus" class="bonus-message hidden">
                 <span>BONUS: FOLLOW Pharos on X</span>
-                <button class="follow-button" onclick="window.open('https://x.com/pharos_network', '_blank')">Follow</button>
+                <button class="follow-button" data-key="pharos" id="pharosFollowBtn">Follow</button>
             </div>
             <div id="blocksenseBonus" class="bonus-message hidden">
                 <span>BONUS: FOLLOW Blocksense on X</span>
-                <button class="follow-button" onclick="window.open('https://x.com/blocksense_', '_blank')">Follow</button>
+                <button class="follow-button" data-key="blocksense" id="blocksenseFollowBtn">Follow</button>
             </div>
         </div>
-        
+
         <canvas id="gameCanvas" width="800" height="600"></canvas>
-        
+
         <div id="gameControls">
             <div id="bonusMessage"></div>
-            
-            <!-- Start Screen -->
+
             <div id="startScreen">
                 <h2>Welcome to Pirate Parrot Game!</h2>
                 <p>Use arrow keys to move, SPACEBAR to shoot</p>
                 <p>Reach 5 points for Pharos bonus, 10 points for Blocksense bonus</p>
-                <button id="startButton">Press ENTER or Click to Start</button>
+
+                <div id="walletConnectGroup">
+                    <button id="connectWalletBtn">Connect Wallet</button>
+                    <div id="walletStatus" class="info" style="margin-top:8px;">Wallet not connected</div>
+                </div>
+
+                <button id="startButton" disabled>Press ENTER or Click to Start</button>
             </div>
-            
+
             <div id="gameOverScreen" class="hidden">
                 <h2>GAME OVER</h2>
                 <p>Final Score: <span id="finalScore">0</span></p>
-                
-                <!-- Blockchain Section -->
+
                 <div id="blockchainSection">
-                    <div id="blockchainStatus">Sending score to blockchain automatically...</div>
+                    <div id="blockchainStatus">Waiting to submit score...</div>
                     <div id="transactionInfo" class="hidden">
                         <p>Transaction sent successfully!</p>
                         <p>TX Hash: <a id="transactionLink" href="#" target="_blank">#</a></p>
                     </div>
                 </div>
-                
+
+                <div id="endTweetGroup">
+                    <button id="tweetScoreBtn">Tweet your score for bonus</button>
+                    <button id="verifyTweetBtn" class="hidden">Verify Tweet (grant bonus)</button>
+                </div>
+
                 <button id="restartButton">Restart Game</button>
             </div>
         </div>
     </div>
 
-    <!-- Web3.js Library -->
+    <!-- SADECE Web3.js, Ethers YOK -->
     <script src="https://cdn.jsdelivr.net/npm/web3@1.8.2/dist/web3.min.js"></script>
-    
-    <!-- Game Scripts -->
     <script src="web3-integration.js"></script>
     <script src="script.js"></script>
 </body>

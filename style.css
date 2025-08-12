@@ -1,238 +1,107 @@
-/* Basic Styles */
 * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
 }
-
 body {
-    font-family: Arial, sans-serif;
-    background-color: #000;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    overflow: hidden;
+    margin: 0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color: #eee;
+    background: radial-gradient(1200px 600px at 50% -200px, #0b1b2b, #051019 60%, #03070C);
 }
-
 #gameContainer {
-    text-align: center;
-    position: relative;
+    width: 900px;
+    margin: 24px auto;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 16px 16px 24px;
+    backdrop-filter: blur(6px);
 }
-
 #gameHeader {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #222;
-    border-radius: 10px 10px 0 0;
+    margin-bottom: 12px;
 }
-
 #gameHeader h1 {
-    font-size: 20px;
-    color: #fff;
+    margin: 0;
+    font-size: 22px;
+    letter-spacing: 0.5px;
 }
-
 #scoreDisplay {
-    font-size: 20px;
-    font-weight: bold;
-    color: #4CAF50;
-}
-
-/* Persistent Bonus Messages */
-#bonusContainer {
-    position: absolute;
-    top: 60px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 5;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-}
-
-.bonus-message {
-    background-color: rgba(50, 50, 50, 0.9);
-    padding: 10px 20px;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    backdrop-filter: blur(5px);
-    border: 1px solid #444;
-}
-
-.bonus-message span {
-    font-size: 16px;
-    font-weight: bold;
-}
-
-.bonus-message.pharos {
-    color: #ff9800;
-    border-color: #ff9800;
-}
-
-.bonus-message.blocksense {
-    color: #2196F3;
-    border-color: #2196F3;
-}
-
-.follow-button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 5px 15px;
-    border-radius: 15px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s;
-}
-
-.follow-button:hover {
-    background-color: #45a049;
-}
-
-.hidden {
-    display: none;
-}
-
-#gameCanvas {
-    background-color: #000;
-    border: 2px solid #333;
-    border-radius: 0 0 10px 10px;
-    margin-top: 70px;
-}
-
-#gameControls {
-    margin-top: 20px;
-}
-
-#bonusMessage {
-    font-size: 18px;
-    font-weight: bold;
-    color: #ff5722;
-    min-height: 30px;
-    padding: 10px;
-    background-color: rgba(50, 50, 50, 0.7);
-    border-radius: 5px;
-    margin-bottom: 10px;
-}
-
-/* Start Screen */
-#startScreen {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(0, 0, 0, 0.9);
-    padding: 30px;
-    border-radius: 10px;
-    border: 2px solid #4CAF50;
-    text-align: center;
-    z-index: 10;
-    width: 80%;
-    max-width: 500px;
-}
-
-#startScreen h2 {
-    color: #4CAF50;
-    margin-bottom: 20px;
-}
-
-#startScreen p {
-    margin-bottom: 15px;
-    line-height: 1.5;
-}
-
-#startButton {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 15px 30px;
-    font-size: 18px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: background-color 0.3s;
-}
-
-#startButton:hover {
-    background-color: #45a049;
-}
-
-#gameOverScreen {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(0, 0, 0, 0.9);
-    padding: 30px;
-    border-radius: 10px;
-    border: 2px solid #ff5722;
-    text-align: center;
-    z-index: 10;
-}
-
-#gameOverScreen h2 {
-    color: #ff5722;
-    margin-bottom: 20px;
-}
-
-#gameOverScreen p {
-    font-size: 18px;
-    margin-bottom: 20px;
-}
-
-#gameOverScreen button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin: 10px;
-    transition: background-color 0.3s;
-}
-
-#gameOverScreen button:hover {
-    background-color: #45a049;
-}
-
-#blockchainStatus {
-    margin-top: 15px;
-    font-size: 14px;
-    min-height: 20px;
-}
-
-.success {
-    color: #4CAF50;
-}
-
-.error {
-    color: #f44336;
-}
-
-.info {
-    color: #2196F3;
-}
-
-/* Blockchain Section Styles */
-#blockchainSection {
-    margin: 20px 0;
-    padding: 15px;
-    background-color: rgba(33, 150, 243, 0.1);
+    background: rgba(0,0,0,0.4);
+    padding: 6px 12px;
     border-radius: 8px;
-    border: 1px solid #2196F3;
+    font-weight: 600;
 }
-
-#transactionInfo {
-    margin-top: 15px;
+#bonusContainer {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 10px;
+    min-height: 46px;
+}
+.bonus-message {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #142033;
+    padding: 8px 10px;
+    border: 1px solid #233a5c;
+    border-radius: 10px;
+}
+.follow-button {
+    padding: 6px 10px;
+    border: 1px solid #3178ff;
+    color: #fff;
+    background: #1b4fff;
+    cursor: pointer;
+    border-radius: 8px;
+}
+.follow-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+#gameCanvas {
+    display: block;
+    margin: 0 auto 10px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: #000;
+    border-radius: 10px;
+}
+#gameControls {
+    display: grid;
+    gap: 12px;
+}
+#bonusMessage {
+    min-height: 22px;
+    color: #ffd166;
+    font-weight: 600;
+}
+#startScreen, #gameOverScreen {
+    text-align: center;
     padding: 10px;
-    background-color: rgba(76, 175, 80, 0.1);
-    border-radius: 5px;
-    border: 1
+    background: rgba(0,0,0,0.25);
+    border-radius: 10px;
+}
+#startButton, #restartButton, #connectWalletBtn, #tweetScoreBtn, #verifyTweetBtn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 10px;
+    background: #1b4fff;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+}
+#startButton:disabled {
+    background: #3a4b78;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+.hidden {
+    display: none !important;
+}
+.info { color: #a8c1ff; }
+.success { color: #57e389; }
+.error { color: #ff6b6b; }
+a { color: #8ab4ff; text-decoration: none; }
+a:hover { text-decoration: underline; }

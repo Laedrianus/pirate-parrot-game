@@ -1,9 +1,7 @@
-// Web3 Integration Variables
 let web3;
 let contract;
 let userAccount;
 
-// Blocksense Contract Address and ABI
 const CONTRACT_ADDRESS = "0x15A96966a7003bfc63B58ee9658418DB72D3974D";
 const CONTRACT_ABI = [
     {
@@ -38,119 +36,76 @@ const CONTRACT_ABI = [
     }
 ];
 
-// Pharos RPC URL
 const PHAROS_RPC_URL = "https://testnet.dplabs-internal.com";
-const CHAIN_ID = 688688;
 
-// Connect to Web3
-async function connectToWeb3() {
+async function connectToWeb3Interactive() {
     try {
-        // Check for MetaMask
         if (window.ethereum) {
             web3 = new Web3(window.ethereum);
-            await window.ethereum.request({ method: 'eth_requestAccounts' });
-            
-            // Get user account
-            const accounts = await web3.eth.getAccounts();
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            if (!accounts || accounts.length === 0) {
+                throw new Error('No accounts returned');
+            }
             userAccount = accounts[0];
-            
-            // Create contract instance
             contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
-            
-            console.log("Web3 connected successfully");
-            return true;
+            return { success: true, account: userAccount };
         } else {
-            // Fallback: HTTP provider
             web3 = new Web3(new Web3.providers.HttpProvider(PHAROS_RPC_URL));
             contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
-            
-            console.log("Web3 connected via HTTP provider");
-            return true;
+            return { success: false, error: 'MetaMask not detected' };
         }
-    } catch (error) {
-        console.error("Web3 connection error:", error);
-        return false;
+    } catch (err) {
+        console.error('Connection error:', err);
+        return { success: false, error: err.message || String(err) };
     }
 }
 
-// Submit Score to Blockchain
+function initReadOnlyWeb3() {
+    if (!web3) {
+        try {
+            web3 = window.ethereum
+                ? new Web3(window.ethereum)
+                : new Web3(new Web3.providers.HttpProvider(PHAROS_RPC_URL));
+            contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
+        } catch (err) {
+            console.error('Init error:', err);
+        }
+    }
+}
+
 async function submitScoreToBlockchain(score) {
     try {
-        // First connect to Web3
-        if (!web3 || !contract) {
-            const connected = await connectToWeb3();
-            if (!connected) {
-                throw new Error("Failed to connect to Web3");
-            }
-        }
-        
-        // Update user account
+        if (!web3 || !contract) initReadOnlyWeb3();
+
         const accounts = await web3.eth.getAccounts();
-        userAccount = accounts[0];
-        
-        // Get gas price
-        const gasPrice = await web3.eth.getGasPrice();
-        
-        // Prepare transaction
-        const tx = {
-            from: userAccount,
-            to: CONTRACT_ADDRESS,
-            gas: 200000,
-            gasPrice: gasPrice,
-             contract.methods.submitScore(score).encodeABI()
-        };
-        
-        // Send transaction
-        const txReceipt = await web3.eth.sendTransaction(tx);
-        
-        return {
-            success: true,
-            txHash: txReceipt.transactionHash
-        };
-    } catch (error) {
-        console.error("Blockchain submission error:", error);
-        return {
-            success: false,
-            error: error.message
-        };
-    }
-}
-
-// Get Player Score from Blockchain
-async function getPlayerScoreFromBlockchain(playerAddress) {
-    try {
-        // First connect to Web3
-        if (!web3 || !contract) {
-            const connected = await connectToWeb3();
-            if (!connected) {
-                throw new Error("Failed to connect to Web3");
-            }
+        if (!accounts || accounts.length === 0) {
+            return { success: false, error: 'Wallet not connected' };
         }
-        
-        // Get score
-        const score = await contract.methods.getPlayerScore(playerAddress).call();
-        return parseInt(score);
+        userAccount = accounts[0];
+
+        let gas = 200000;
+        try {
+            gas = await contract.methods.submitScore(score).estimateGas({ from: userAccount });
+        } catch (e) {
+            console.warn("Gas estimate failed, using fallback");
+        }
+
+        const tx = await contract.methods.submitScore(score).send({
+            from: userAccount,
+            gas: Math.min(gas + 10000, 500000)
+        });
+
+        return { success: true, txHash: tx.transactionHash };
     } catch (error) {
-        console.error("Get player score error:", error);
-        return null;
+        console.error('Submit error:', error);
+        return { success: false, error: error.message || "Transaction failed" };
     }
 }
 
-// Get Leaderboard from Blockchain
-async function getLeaderboardFromBlockchain() {
-    try {
-        // This function would be used if the contract had a leaderboard function
-        // Currently not implemented in our contract
-        console.log("Leaderboard function not implemented in current contract");
-        return [];
-    } catch (error) {
-        console.error("Get leaderboard error:", error);
-        return [];
-    }
-}
+// Globala aç
+window.connectToWeb3Interactive = connectToWeb3Interactive;
+window.submitScoreToBlockchain = submitScoreToBlockchain;
+window.initReadOnlyWeb3 = initReadOnlyWeb3;
 
-// Connect to Web3 on page load
-window.addEventListener('load', async () => {
-    // Try to connect to Web3
-    await connectToWeb3();
-});
+// Sayfa yüklendiğinde readonly başlat
+window.addEventListener('load', initReadOnlyWeb3);
