@@ -8,7 +8,7 @@ body {
     background: radial-gradient(1200px 600px at 50% -200px, #0b1b2b, #051019 60%, #03070C);
 }
 #gameContainer {
-    width: 900px;
+    width: 1200px; /* Genişletildi */
     margin: 24px auto;
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(255,255,255,0.08);
@@ -60,6 +60,47 @@ body {
     opacity: 0.6;
     cursor: not-allowed;
 }
+
+/* Yeni Ana İçerik Düzeni */
+#mainContent {
+    display: flex;
+    gap: 20px;
+}
+#gameArea {
+    flex: 0 0 auto; /* Oyun alanının sabit kalmasını sağlar */
+}
+#leaderboardSidebar {
+    flex: 1;
+    min-width: 0; /* Flex item'ların taşmasını engeller */
+    background: rgba(0,0,0,0.25);
+    border-radius: 10px;
+    padding: 15px;
+    max-height: 620px; /* Canvas yüksekliği + padding */
+    overflow-y: auto; /* Uzun liste için kaydırma */
+}
+#leaderboardSidebar h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: center;
+}
+#leaderboardTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+#leaderboardTable th, #leaderboardTable td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+#leaderboardTable th {
+    background-color: rgba(0,0,0,0.3);
+    font-weight: bold;
+}
+#leaderboardBody tr:hover {
+    background-color: rgba(255,255,255,0.05);
+}
+/* Yeni Ana İçerik Düzeni Sonu */
+
 #gameCanvas {
     display: block;
     margin: 0 auto 10px;

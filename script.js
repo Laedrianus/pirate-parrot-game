@@ -17,7 +17,7 @@ const blocksenseFollowBtn = document.getElementById('blocksenseFollowBtn');
 const tweetScoreBtn = document.getElementById('tweetScoreBtn');
 const verifyTweetBtn = document.getElementById('verifyTweetBtn');
 
-/* Leaderboard UI */
+/* Leaderboard UI - Sidebar */
 const leaderboardLoading = document.getElementById('leaderboardLoading');
 const leaderboardTable = document.getElementById('leaderboardTable');
 const leaderboardBody = document.getElementById('leaderboardBody');
@@ -109,6 +109,9 @@ connectWalletBtn.addEventListener('click', async () => {
     startButton.disabled = false;
     connectWalletBtn.textContent = 'Connected';
     connectWalletBtn.disabled = true;
+    
+    // Cüzdan bağlandıktan sonra liderlik tablosunu yükle
+    await loadAndRenderLeaderboard();
   } else {
     walletConnected = false;
     walletStatus.textContent = `Error: ${res.error}`;
@@ -335,7 +338,7 @@ async function loadAndRenderLeaderboard(){
       leaderboardLoading.textContent = 'Leaderboard integration missing.';
       return;
     }
-    const res = await getLeaderboardFromBlockchain();
+    const res = await getLeaderboardFromBlockchain(50); // 50 oyuncu iste
     if (!res.success) {
       leaderboardLoading.textContent = `Load error: ${res.error}`;
       leaderboardLoading.className = 'error';
@@ -356,7 +359,8 @@ function renderLeaderboard(rows){
   leaderboardLoading.classList.add('hidden');
   leaderboardTable.classList.remove('hidden');
 
-  rows.slice(0,10).forEach((entry, idx) => {
+  // İlk 50 oyuncuyu göster
+  rows.slice(0,50).forEach((entry, idx) => {
     const tr = document.createElement('tr');
 
     const tdRank = document.createElement('td');
@@ -379,3 +383,14 @@ function renderLeaderboard(rows){
 setupFollowButtons();
 updateScore();
 gameLoop();
+
+// Sayfa yüklendiğinde liderlik tablosunu yükle (cüzdan bağlıysa)
+window.addEventListener('load', async () => {
+    // Kısa bir gecikme, tüm scriptlerin yüklenmesi için
+    setTimeout(async () => {
+        if (typeof initReadOnlyWeb3 === 'function') {
+            initReadOnlyWeb3();
+            await loadAndRenderLeaderboard();
+        }
+    }, 100);
+});
